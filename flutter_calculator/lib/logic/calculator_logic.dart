@@ -109,6 +109,14 @@ class CalculatorLogic extends ChangeNotifier {
   String formatNumber(double value) {
     if (value.isNaN || value.isInfinite) return 'Error';
     
+    double absVal = value.abs();
+    // Use scientific notation for extremely large or small values
+    if (absVal >= 1e15 || (absVal > 0 && absVal < 1e-7)) {
+      String expStr = value.toStringAsExponential(6);
+      // Clean up trailing zeroes in mantissa (e.g. 1.000000e+15 -> 1e+15)
+      return expStr.replaceAll(RegExp(r'\.?0+e'), 'e');
+    }
+    
     // Avoid floating-point inaccuracies
     String valStr = value.toStringAsFixed(10);
     double rounded = double.parse(valStr);
@@ -133,7 +141,7 @@ class CalculatorLogic extends ChangeNotifier {
       _currentInput = num;
       _shouldResetDisplay = false;
     } else {
-      if (_currentInput.length < 15) {
+      if (_currentInput.length < 20) {
         _currentInput += num;
       }
     }

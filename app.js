@@ -161,6 +161,14 @@ function formatNumber(value) {
     if (isNaN(num)) return 'Error';
     if (!isFinite(num)) return 'Error';
     
+    const absVal = Math.abs(num);
+    // Use scientific notation for extremely large or small values
+    if (absVal >= 1e15 || (absVal > 0 && absVal < 1e-7)) {
+        let expStr = num.toExponential(6);
+        // Clean up trailing zeroes in mantissa (e.g. 1.000000e+15 -> 1e+15)
+        return expStr.replace(/\.?0+e/, 'e');
+    }
+    
     // Precision format to avoid float inaccuracies e.g. 0.1 + 0.2 = 0.3000000004
     const precision = 12;
     let formatted = Number(num.toPrecision(precision)).toString();
@@ -181,7 +189,7 @@ function appendNumber(num) {
         shouldResetDisplay = false;
     } else {
         // Prevent typing too many numbers (prevent overflow)
-        if (currentInput.length < 15) {
+        if (currentInput.length < 20) {
             currentInput += num;
         }
     }
