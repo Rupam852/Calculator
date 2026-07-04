@@ -166,16 +166,73 @@ class CalculatorLogic extends ChangeNotifier {
   }
 
   void handleBackspace() {
-    if (_shouldResetDisplay) {
+    if (_expression.endsWith('=')) {
       clearAll();
       return;
     }
-    if (_currentInput.length > 1) {
-      _currentInput = _currentInput.substring(0, _currentInput.length - 1);
+
+    if (_shouldResetDisplay || _currentInput == '0') {
+      if (_activeOperator != null) {
+        final List<String> parts = _expression.split(' ');
+        if (parts.length >= 3) {
+          final String lastNum = parts.removeLast();
+          final String lastOp = parts.removeLast();
+          
+          _expression = parts.join(' ');
+          
+          final opMapping = {'+': 'add', '−': 'subtract', '×': 'multiply', '÷': 'divide'};
+          _activeOperator = opMapping[lastOp];
+          _previousValue = _evaluateExpressionParts(parts);
+          
+          _currentInput = lastNum;
+          _shouldResetDisplay = false;
+        } else if (parts.isNotEmpty && parts[0].isNotEmpty) {
+          _currentInput = parts[0];
+          _expression = '';
+          _activeOperator = null;
+          _previousValue = null;
+          _shouldResetDisplay = false;
+        } else {
+          clearAll();
+        }
+      } else {
+        clearAll();
+      }
     } else {
-      _currentInput = '0';
+      if (_currentInput.length > 1) {
+        _currentInput = _currentInput.substring(0, _currentInput.length - 1);
+      } else {
+        _currentInput = '0';
+      }
     }
     notifyListeners();
+  }
+
+  double _evaluateExpressionParts(List<String> parts) {
+    if (parts.isEmpty) return 0;
+    double result = double.tryParse(parts[0]) ?? 0;
+    
+    int i = 1;
+    while (i < parts.length - 1) {
+      String op = parts[i];
+      double nextVal = double.tryParse(parts[i + 1]) ?? 0;
+      
+      if (op == '+') {
+        result += nextVal;
+      } else if (op == '−') {
+        result -= nextVal;
+      } else if (op == '×') {
+        result *= nextVal;
+      } else if (op == '÷') {
+        if (nextVal != 0) {
+          result /= nextVal;
+        } else {
+          result = 0;
+        }
+      }
+      i += 2;
+    }
+    return result;
   }
 
   void handlePercent() {

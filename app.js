@@ -195,16 +195,75 @@ function clearAll() {
 }
 
 function handleBackspace() {
-    if (shouldResetDisplay) {
+    if (expression.endsWith('=')) {
         clearAll();
         return;
     }
-    if (currentInput.length > 1) {
-        currentInput = currentInput.slice(0, -1);
+
+    if (shouldResetDisplay || currentInput === '0') {
+        if (activeOperator) {
+            const parts = expression.split(' ');
+            if (parts.length >= 3) {
+                const lastNum = parts.pop();
+                const lastOp = parts.pop();
+                
+                expression = parts.join(' ');
+                
+                const opMapping = { '+': 'add', '−': 'subtract', '×': 'multiply', '÷': 'divide' };
+                activeOperator = opMapping[lastOp];
+                previousValue = evaluateExpressionParts(parts);
+                
+                currentInput = lastNum;
+                shouldResetDisplay = false;
+            } else if (parts.length > 0 && parts[0] !== "") {
+                currentInput = parts[0];
+                expression = '';
+                activeOperator = null;
+                previousValue = null;
+                shouldResetDisplay = false;
+            } else {
+                clearAll();
+            }
+        } else {
+            clearAll();
+        }
     } else {
-        currentInput = '0';
+        if (currentInput.length > 1) {
+            currentInput = currentInput.slice(0, -1);
+        } else {
+            currentInput = '0';
+        }
     }
     updateDisplay();
+}
+
+function evaluateExpressionParts(parts) {
+    if (parts.length === 0) return 0;
+    let result = parseFloat(parts[0]);
+    if (isNaN(result)) return 0;
+    
+    let i = 1;
+    while (i < parts.length - 1) {
+        const op = parts[i];
+        const nextVal = parseFloat(parts[i + 1]);
+        if (isNaN(nextVal)) break;
+        
+        if (op === '+') {
+            result += nextVal;
+        } else if (op === '−') {
+            result -= nextVal;
+        } else if (op === '×') {
+            result *= nextVal;
+        } else if (op === '÷') {
+            if (nextVal !== 0) {
+                result /= nextVal;
+            } else {
+                result = 0;
+            }
+        }
+        i += 2;
+    }
+    return result;
 }
 
 function handlePercent() {
