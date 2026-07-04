@@ -63,7 +63,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: isDark
-                        ? [const Color(0xFF090D16), const Color(0xFF111827), const Color(0xFF1E112A)]
+                        ? [const Color(0xFF050B14), const Color(0xFF0A1128), const Color(0xFF101F42)]
                         : [const Color(0xFFEEF2F6), const Color(0xFFE0E7FF), const Color(0xFFFAE8FF)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -81,7 +81,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   height: 500,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isDark ? const Color(0x266366F1) : const Color(0x336366F1),
+                    color: isDark ? const Color(0x2E1E40B0) : const Color(0x336366F1),
                   ),
                 ),
               ),
@@ -94,7 +94,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   height: 600,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isDark ? const Color(0x1FA855F7) : const Color(0x26A855F7),
+                    color: isDark ? const Color(0x1E38BDF8) : const Color(0x26A855F7),
                   ),
                 ),
               ),
