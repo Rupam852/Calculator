@@ -51,7 +51,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
         // Dimensions
         final double screenWidth = MediaQuery.of(context).size.width;
+        final bool isMobile = screenWidth <= 600;
         final double cardWidth = screenWidth > 400 ? 375.0 : screenWidth * 0.9;
+        final double drawerWidth = isMobile ? screenWidth * 0.85 : 375.0;
 
         return Scaffold(
           body: Stack(
@@ -108,230 +110,192 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
               // 4. Main Calculator Interface
               SafeArea(
-                child: Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: GlassBox(
-                      width: cardWidth,
-                      color: cardBg,
-                      borderColor: cardBorder,
-                      borderRadius: BorderRadius.circular(32),
-                      padding: const EdgeInsets.all(24),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          // Active Calculator Content
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
+                child: isMobile
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        child: Column(
+                          children: [
+                            // Header
+                            _buildHeader(textMain, textMuted),
+                            const SizedBox(height: 16),
+                            // Screen Display (Expanded on mobile to take remaining space)
+                            Expanded(
+                              child: _buildScreenDisplay(
+                                screenBg: screenBg,
+                                screenBorder: screenBorder,
+                                textMuted: textMuted,
+                                textMain: textMain,
+                                screenWidth: screenWidth,
+                                isMobile: true,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            // Keypad Grid
+                            _buildKeypad(
+                              isDark: isDark,
+                              btnNumBg: btnNumBg,
+                              btnNumBorder: btnNumBorder,
+                              btnNumText: btnNumText,
+                              btnActionBg: btnActionBg,
+                              btnActionBorder: btnActionBorder,
+                              btnActionText: btnActionText,
+                              btnOpBg: btnOpBg,
+                              btnOpBorder: btnOpBorder,
+                              btnOpText: btnOpText,
+                              btnEqGradient: btnEqGradient,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Center(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: GlassBox(
+                            width: cardWidth,
+                            color: cardBg,
+                            borderColor: cardBorder,
+                            borderRadius: BorderRadius.circular(32),
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildHeader(textMain, textMuted),
+                                const SizedBox(height: 20),
+                                _buildScreenDisplay(
+                                  screenBg: screenBg,
+                                  screenBorder: screenBorder,
+                                  textMuted: textMuted,
+                                  textMain: textMain,
+                                  screenWidth: screenWidth,
+                                  isMobile: false,
+                                ),
+                                const SizedBox(height: 20),
+                                _buildKeypad(
+                                  isDark: isDark,
+                                  btnNumBg: btnNumBg,
+                                  btnNumBorder: btnNumBorder,
+                                  btnNumText: btnNumText,
+                                  btnActionBg: btnActionBg,
+                                  btnActionBorder: btnActionBorder,
+                                  btnActionText: btnActionText,
+                                  btnOpBg: btnOpBg,
+                                  btnOpBorder: btnOpBorder,
+                                  btnOpText: btnOpText,
+                                  btnEqGradient: btnEqGradient,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+
+              // 5. Sliding History Drawer Overlay (Root stack level)
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 350),
+                curve: Curves.easeInOutCubic,
+                top: 0,
+                bottom: 0,
+                right: _isHistoryOpen ? 0 : -drawerWidth,
+                width: drawerWidth,
+                child: GlassBox(
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(24),
+                    bottomLeft: const Radius.circular(24),
+                    topRight: isMobile ? Radius.zero : const Radius.circular(24),
+                    bottomRight: isMobile ? Radius.zero : const Radius.circular(24),
+                  ),
+                  color: historyDrawerBg,
+                  borderColor: cardBorder,
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        // History Header
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24, left: 24, right: 24, bottom: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Header
+                              Text(
+                                'History',
+                                style: TextStyle(
+                                  color: textMain,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      isDark ? Icons.wb_sunny_outlined : Icons.dark_mode_outlined,
-                                      color: textMain,
-                                    ),
-                                    onPressed: widget.logic.toggleTheme,
-                                  ),
-                                  Text(
-                                    'CALCULATOR',
-                                    style: TextStyle(
-                                      color: textMuted,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      letterSpacing: 2.0,
+                                  TextButton(
+                                    onPressed: widget.logic.clearHistory,
+                                    child: Text(
+                                      'Clear All',
+                                      style: TextStyle(color: btnActionText, fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.history, color: textMain),
+                                    icon: Icon(Icons.close, color: textMain),
                                     onPressed: () {
                                       setState(() {
-                                        _isHistoryOpen = true;
+                                        _isHistoryOpen = false;
                                       });
                                     },
                                   ),
                                 ],
-                              ),
-                              const SizedBox(height: 20),
-
-                              // Screen Display
-                              Container(
-                                width: double.infinity,
-                                constraints: const BoxConstraints(minHeight: 110),
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  color: screenBg,
-                                  border: Border.all(color: screenBorder),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    // Expression Preview
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      reverse: true,
-                                      child: Text(
-                                        widget.logic.expression +
-                                            (widget.logic.activeOperator != null
-                                                ? ' ${_getOperatorSymbol(widget.logic.activeOperator!)}'
-                                                : ''),
-                                        style: TextStyle(
-                                          color: textMuted,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    // Current Input
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      reverse: true,
-                                      child: Text(
-                                        widget.logic.currentInput,
-                                        style: TextStyle(
-                                          color: textMain,
-                                          fontSize: screenWidth < 360 ? 30 : 36,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-
-                              // Keypad Grid
-                              _buildKeypad(
-                                isDark: isDark,
-                                btnNumBg: btnNumBg,
-                                btnNumBorder: btnNumBorder,
-                                btnNumText: btnNumText,
-                                btnActionBg: btnActionBg,
-                                btnActionBorder: btnActionBorder,
-                                btnActionText: btnActionText,
-                                btnOpBg: btnOpBg,
-                                btnOpBorder: btnOpBorder,
-                                btnOpText: btnOpText,
-                                btnEqGradient: btnEqGradient,
-                              ),
+                              )
                             ],
                           ),
-
-                          // 5. Sliding History Drawer Overlay
-                          AnimatedPositioned(
-                            duration: const Duration(milliseconds: 350),
-                            curve: Curves.easeInOutCubic,
-                            top: -24,
-                            bottom: -24,
-                            right: _isHistoryOpen ? -24 : -cardWidth - 24,
-                            width: cardWidth,
-                            child: GlassBox(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(32),
-                                bottomRight: Radius.circular(32),
-                                topLeft: Radius.circular(24),
-                                bottomLeft: Radius.circular(24),
-                              ),
-                              color: historyDrawerBg,
-                              borderColor: cardBorder,
-                              child: Column(
-                                children: [
-                                  // History Header
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 24, left: 24, right: 24, bottom: 12),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'History',
-                                          style: TextStyle(
-                                            color: textMain,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        Row(
+                        ),
+                        const Divider(height: 1, color: Colors.white24),
+                        
+                        // History List
+                        Expanded(
+                          child: widget.logic.history.isEmpty
+                              ? Center(
+                                  child: Text(
+                                    'No history yet',
+                                    style: TextStyle(color: textMuted, fontSize: 16),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  padding: const EdgeInsets.all(16),
+                                  itemCount: widget.logic.history.length,
+                                  itemBuilder: (context, index) {
+                                    final item = widget.logic.history[index];
+                                    return InkWell(
+                                      onTap: () {
+                                        widget.logic.selectHistoryItem(item);
+                                        setState(() {
+                                          _isHistoryOpen = false;
+                                        });
+                                      },
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
-                                            TextButton(
-                                              onPressed: widget.logic.clearHistory,
-                                              child: Text(
-                                                'Clear All',
-                                                style: TextStyle(color: btnActionText, fontWeight: FontWeight.w500),
+                                            Text(
+                                              item.expression,
+                                              style: TextStyle(color: textMuted, fontSize: 13),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              item.result,
+                                              style: TextStyle(
+                                                color: textMain,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
-                                            IconButton(
-                                              icon: Icon(Icons.close, color: textMain),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _isHistoryOpen = false;
-                                                });
-                                              },
-                                            ),
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const Divider(height: 1, color: Colors.white24),
-                                  
-                                  // History List
-                                  Expanded(
-                                    child: widget.logic.history.isEmpty
-                                        ? Center(
-                                            child: Text(
-                                              'No history yet',
-                                              style: TextStyle(color: textMuted, fontSize: 16),
-                                            ),
-                                          )
-                                        : ListView.builder(
-                                            padding: const EdgeInsets.all(16),
-                                            itemCount: widget.logic.history.length,
-                                            itemBuilder: (context, index) {
-                                              final item = widget.logic.history[index];
-                                              return InkWell(
-                                                onTap: () {
-                                                  widget.logic.selectHistoryItem(item);
-                                                  setState(() {
-                                                    _isHistoryOpen = false;
-                                                  });
-                                                },
-                                                borderRadius: BorderRadius.circular(12),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        item.expression,
-                                                        style: TextStyle(color: textMuted, fontSize: 13),
-                                                      ),
-                                                      const SizedBox(height: 4),
-                                                      Text(
-                                                        item.result,
-                                                        style: TextStyle(
-                                                          color: textMain,
-                                                          fontSize: 18,
-                                                          fontWeight: FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -340,6 +304,94 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildHeader(Color textMain, Color textMuted) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          icon: Icon(
+            widget.logic.isDarkMode ? Icons.wb_sunny_outlined : Icons.dark_mode_outlined,
+            color: textMain,
+          ),
+          onPressed: widget.logic.toggleTheme,
+        ),
+        Text(
+          'CALCULATOR',
+          style: TextStyle(
+            color: textMuted,
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            letterSpacing: 2.0,
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.history, color: textMain),
+          onPressed: () {
+            setState(() {
+              _isHistoryOpen = true;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScreenDisplay({
+    required Color screenBg,
+    required Color screenBorder,
+    required Color textMuted,
+    required Color textMain,
+    required double screenWidth,
+    required bool isMobile,
+  }) {
+    return Container(
+      width: double.infinity,
+      constraints: isMobile ? null : const BoxConstraints(minHeight: 110),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: screenBg,
+        border: Border.all(color: screenBorder),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          // Expression Preview
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            reverse: true,
+            child: Text(
+              widget.logic.expression +
+                  (widget.logic.activeOperator != null
+                      ? ' ${_getOperatorSymbol(widget.logic.activeOperator!)}'
+                      : ''),
+              style: TextStyle(
+                color: textMuted,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          // Current Input
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            reverse: true,
+            child: Text(
+              widget.logic.currentInput,
+              style: TextStyle(
+                color: textMain,
+                fontSize: screenWidth < 360 ? 30 : 36,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
