@@ -95,6 +95,17 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove default blue outline on click/tap, but keep accessible styles for keyboard navigation */
+button:focus, a:focus, .btn:focus {
+    outline: none;
+}
+
+button:focus-visible, a:focus-visible, .btn:focus-visible {
+    outline: 2px solid var(--btn-op-border);
+    outline-offset: 2px;
 }
 
 body {
