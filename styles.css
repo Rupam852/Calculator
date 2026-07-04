@@ -102,8 +102,10 @@ body {
     background: var(--bg-gradient);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
     padding: 20px 0;
     overflow-y: auto;
     overflow-x: hidden;
@@ -505,4 +507,76 @@ body {
         font-size: 1.8rem;
     }
 }
+
+/* Download Android App Button Styles */
+.download-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    width: 100%;
+    max-width: 375px;
+    padding: 0 16px;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--calc-bg);
+    border: 1px solid var(--calc-border);
+    border-radius: 50px;
+    padding: 14px 28px;
+    text-decoration: none;
+    color: var(--text-main);
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    box-shadow: var(--calc-shadow);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all var(--transition-speed) var(--transition-bounce);
+    cursor: pointer;
+    width: 100%;
+}
+
+.download-btn:hover {
+    transform: scale(1.04);
+    background: var(--btn-num-hover);
+    border-color: var(--btn-op-border);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+    color: var(--btn-op-text);
+}
+
+.download-btn:active {
+    transform: scale(0.96);
+}
+
+.android-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    position: relative;
+    top: 3px;
+    transition: transform var(--transition-speed) ease;
+}
+
+.download-btn:hover .android-icon {
+    transform: rotate(-10deg) scale(1.1);
+}
+
+/* Mobile responsive margin */
+@media (max-width: 400px) {
+    .download-container {
+        width: calc(100% - 32px);
+        padding: 0;
+    }
+    
+    .download-btn {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+}
+
 
