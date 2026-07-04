@@ -545,8 +545,6 @@ body {
     font-weight: 500;
     letter-spacing: 0.5px;
     box-shadow: var(--calc-shadow);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     transition: all var(--transition-speed) var(--transition-bounce);
     cursor: pointer;
     width: 100%;
