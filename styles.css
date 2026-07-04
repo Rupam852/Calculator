@@ -1,0 +1,508 @@
+/* CSS Reset & Variable Definitions */
+:root {
+    /* Fonts */
+    --font-primary: 'Outfit', sans-serif;
+
+    /* Common Transitions */
+    --transition-speed: 0.3s;
+    --transition-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Dark Theme Variables (Default) */
+[data-theme="dark"] {
+    --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 50%, #1e112a 100%);
+    --calc-bg: rgba(17, 24, 39, 0.6);
+    --calc-border: rgba(255, 255, 255, 0.08);
+    --calc-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    
+    --screen-bg: rgba(10, 15, 30, 0.7);
+    --screen-border: rgba(255, 255, 255, 0.05);
+    
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    
+    --btn-num-bg: rgba(255, 255, 255, 0.04);
+    --btn-num-border: rgba(255, 255, 255, 0.03);
+    --btn-num-text: #e2e8f0;
+    --btn-num-hover: rgba(255, 255, 255, 0.09);
+    
+    --btn-action-bg: rgba(244, 63, 94, 0.15);
+    --btn-action-border: rgba(244, 63, 94, 0.2);
+    --btn-action-text: #fb7185;
+    --btn-action-hover: rgba(244, 63, 94, 0.25);
+    
+    --btn-op-bg: rgba(99, 102, 241, 0.2);
+    --btn-op-border: rgba(99, 102, 241, 0.25);
+    --btn-op-text: #818cf8;
+    --btn-op-hover: rgba(99, 102, 241, 0.35);
+    
+    --btn-eq-bg: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    --btn-eq-text: #ffffff;
+    --btn-eq-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    --btn-eq-hover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+    
+    --header-icon-hover: rgba(255, 255, 255, 0.08);
+    --circle-1-bg: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    --circle-2-bg: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+    
+    --history-drawer-bg: rgba(15, 23, 42, 0.95);
+    --history-item-hover: rgba(255, 255, 255, 0.03);
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+    --bg-gradient: linear-gradient(135deg, #eef2f6 0%, #e0e7ff 50%, #fae8ff 100%);
+    --calc-bg: rgba(255, 255, 255, 0.65);
+    --calc-border: rgba(255, 255, 255, 0.6);
+    --calc-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.15);
+    
+    --screen-bg: rgba(255, 255, 255, 0.7);
+    --screen-border: rgba(255, 255, 255, 0.5);
+    
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    
+    --btn-num-bg: rgba(255, 255, 255, 0.7);
+    --btn-num-border: rgba(255, 255, 255, 0.8);
+    --btn-num-text: #334155;
+    --btn-num-hover: rgba(255, 255, 255, 0.95);
+    
+    --btn-action-bg: rgba(225, 29, 72, 0.08);
+    --btn-action-border: rgba(225, 29, 72, 0.15);
+    --btn-action-text: #e11d48;
+    --btn-action-hover: rgba(225, 29, 72, 0.15);
+    
+    --btn-op-bg: rgba(79, 70, 229, 0.08);
+    --btn-op-border: rgba(79, 70, 229, 0.15);
+    --btn-op-text: #4f46e5;
+    --btn-op-hover: rgba(79, 70, 229, 0.15);
+    
+    --btn-eq-bg: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+    --btn-eq-text: #ffffff;
+    --btn-eq-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    --btn-eq-hover: linear-gradient(135deg, #3730a3 0%, #701a75 100%);
+    
+    --header-icon-hover: rgba(0, 0, 0, 0.05);
+    --circle-1-bg: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+    --circle-2-bg: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    
+    --history-drawer-bg: rgba(255, 255, 255, 0.97);
+    --history-item-hover: rgba(0, 0, 0, 0.02);
+}
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    transition: background var(--transition-speed) ease;
+}
+
+/* Background Blur Circles */
+.background-decorations {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    transition: background var(--transition-speed) ease;
+}
+
+.circle-1 {
+    width: 500px;
+    height: 500px;
+    top: -100px;
+    left: -100px;
+    background: var(--circle-1-bg);
+}
+
+.circle-2 {
+    width: 600px;
+    height: 600px;
+    bottom: -150px;
+    right: -100px;
+    background: var(--circle-2-bg);
+}
+
+/* Calculator Wrapper */
+.calculator-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 375px;
+    background: var(--calc-bg);
+    border: 1px solid var(--calc-border);
+    border-radius: 32px;
+    padding: 24px;
+    box-shadow: var(--calc-shadow);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: background var(--transition-speed) ease,
+                border-color var(--transition-speed) ease,
+                box-shadow var(--transition-speed) ease;
+}
+
+/* Calculator Header */
+.calculator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-main);
+    transition: background-color var(--transition-speed) ease,
+                transform var(--transition-speed) var(--transition-bounce);
+    outline: none;
+}
+
+.icon-btn:hover {
+    background-color: var(--header-icon-hover);
+    transform: scale(1.1);
+}
+
+.icon-btn:active {
+    transform: scale(0.9);
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+    transition: transform var(--transition-speed) ease;
+}
+
+/* Render correct theme icons */
+[data-theme="dark"] .icon-sun {
+    display: none;
+}
+
+[data-theme="light"] .icon-moon {
+    display: none;
+}
+
+/* Calculator Screen/Display */
+.calculator-screen {
+    background: var(--screen-bg);
+    border: 1px solid var(--screen-border);
+    border-radius: 20px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    min-height: 110px;
+    gap: 6px;
+    overflow: hidden;
+    word-break: break-all;
+    transition: background-color var(--transition-speed) ease,
+                border-color var(--transition-speed) ease;
+}
+
+.expression-preview {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    min-height: 1.2rem;
+    font-weight: 400;
+    text-align: right;
+    width: 100%;
+    opacity: 0.8;
+}
+
+.current-input {
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--text-main);
+    width: 100%;
+    text-align: right;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+.current-input::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+/* Keyboard / Buttons Grid */
+.calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+/* Button Styling */
+.btn {
+    border-radius: 18px;
+    font-family: var(--font-primary);
+    font-size: 1.3rem;
+    font-weight: 500;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all var(--transition-speed) var(--transition-bounce);
+    user-select: none;
+    outline: none;
+}
+
+.btn:active {
+    transform: scale(0.92);
+}
+
+/* Number Button Styles */
+.btn-number {
+    background: var(--btn-num-bg);
+    border: 1px solid var(--btn-num-border);
+    color: var(--btn-num-text);
+}
+
+.btn-number:hover {
+    background: var(--btn-num-hover);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Operator Button Styles */
+.btn-operator {
+    background: var(--btn-op-bg);
+    border: 1px solid var(--btn-op-border);
+    color: var(--btn-op-text);
+}
+
+.btn-operator:hover {
+    background: var(--btn-op-hover);
+}
+
+/* Action Button Styles (AC, Backspace, %, ±) */
+.btn-action {
+    background: var(--btn-action-bg);
+    border: 1px solid var(--btn-action-border);
+    color: var(--btn-action-text);
+}
+
+.btn-action:hover {
+    background: var(--btn-action-hover);
+}
+
+/* Equals Button Styles */
+.btn-equals {
+    background: var(--btn-eq-bg);
+    border: none;
+    color: var(--btn-eq-text);
+    box-shadow: var(--btn-eq-shadow);
+    grid-column: span 1; /* Keep it normal size or change if desired */
+    font-weight: 600;
+}
+
+.btn-equals:hover {
+    background: var(--btn-eq-hover);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    transform: translateY(-1px);
+}
+
+.btn-equals:active {
+    transform: scale(0.94);
+}
+
+/* Slide-out History Drawer */
+.history-drawer {
+    position: absolute;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--history-drawer-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100;
+    transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+}
+
+.history-drawer.active {
+    right: 0;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--calc-border);
+    padding-bottom: 12px;
+}
+
+.history-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.text-btn {
+    background: transparent;
+    border: none;
+    color: var(--btn-action-text);
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.text-btn:hover {
+    background-color: var(--btn-action-bg);
+}
+
+.history-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--calc-border) transparent;
+}
+
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: var(--calc-border);
+    border-radius: 3px;
+}
+
+.empty-history-msg {
+    color: var(--text-muted);
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 40px;
+    font-weight: 400;
+}
+
+/* History Item Styling */
+.history-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--calc-border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+}
+
+.history-item:hover {
+    background: var(--history-item-hover);
+    transform: translateY(-2px);
+    border-color: var(--btn-op-border);
+}
+
+.history-item-expr {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.history-item-result {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Small screen optimization */
+@media (max-height: 600px) {
+    .calculator-wrapper {
+        border-radius: 0;
+        height: 100vh;
+        max-height: 100%;
+        max-width: 100vw;
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    body {
+        align-items: stretch;
+    }
+    
+    .btn {
+        height: 52px;
+        border-radius: 14px;
+    }
+}
+
+/* Mobile screen width optimization */
+@media (max-width: 400px) {
+    .calculator-wrapper {
+        width: calc(100% - 32px); /* 16px margin on left & right */
+        padding: 16px;
+        gap: 16px;
+        border-radius: 24px;
+    }
+    
+    .btn {
+        height: 56px;
+        font-size: 1.15rem;
+        border-radius: 14px;
+    }
+    
+    .current-input {
+        font-size: 1.8rem;
+    }
+}
+

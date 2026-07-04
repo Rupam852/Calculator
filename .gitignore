@@ -1,0 +1,15 @@
+# Windows System Files
+Thumbs.db
+desktop.ini
+
+# IDE and Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
+.DS_Store

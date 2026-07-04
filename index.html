@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Glassmorphic Calculator</title>
+    <!-- Modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-decorations">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+    </div>
+
+    <main class="calculator-wrapper">
+        <header class="calculator-header">
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
+                <!-- Moon icon (Dark mode indicator) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <!-- Sun icon (Light mode indicator) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+            <h1 class="app-title">Calculator</h1>
+            <!-- History Toggle -->
+            <button id="history-toggle" class="icon-btn" aria-label="Open History">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Display Screen -->
+        <section class="calculator-screen">
+            <div id="expression-display" class="expression-preview"></div>
+            <div id="current-display" class="current-input">0</div>
+        </section>
+
+        <!-- Keyboard Keypad -->
+        <section class="calculator-grid">
+            <button class="btn btn-action" data-action="clear" id="btn-clear">AC</button>
+            <button class="btn btn-action" data-action="backspace" id="btn-backspace" aria-label="Backspace">⌫</button>
+            <button class="btn btn-action" data-action="percent" id="btn-percent">%</button>
+            <button class="btn btn-operator" data-operator="divide" id="btn-divide">÷</button>
+
+            <button class="btn btn-number" id="btn-7">7</button>
+            <button class="btn btn-number" id="btn-8">8</button>
+            <button class="btn btn-number" id="btn-9">9</button>
+            <button class="btn btn-operator" data-operator="multiply" id="btn-multiply">×</button>
+
+            <button class="btn btn-number" id="btn-4">4</button>
+            <button class="btn btn-number" id="btn-5">5</button>
+            <button class="btn btn-number" id="btn-6">6</button>
+            <button class="btn btn-operator" data-operator="subtract" id="btn-subtract">−</button>
+
+            <button class="btn btn-number" id="btn-1">1</button>
+            <button class="btn btn-number" id="btn-2">2</button>
+            <button class="btn btn-number" id="btn-3">3</button>
+            <button class="btn btn-operator" data-operator="add" id="btn-add">+</button>
+
+            <button class="btn btn-action" data-action="negate" id="btn-negate">±</button>
+            <button class="btn btn-number" id="btn-0">0</button>
+            <button class="btn btn-number" data-action="decimal" id="btn-decimal">.</button>
+            <button class="btn btn-equals" id="btn-equals">=</button>
+        </section>
+
+        <!-- Slide-out History Drawer -->
+        <aside id="history-drawer" class="history-drawer">
+            <div class="history-header">
+                <h2>History</h2>
+                <div class="history-actions">
+                    <button id="clear-history" class="text-btn">Clear All</button>
+                    <button id="close-history" class="icon-btn" aria-label="Close history">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div id="history-list" class="history-list">
+                <div class="empty-history-msg">No history yet</div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
