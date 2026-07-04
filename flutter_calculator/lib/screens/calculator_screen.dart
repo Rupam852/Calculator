@@ -368,14 +368,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         children: [
           // Expression Preview
           _buildExpressionPreview(
-            expression: fullExpression,
+            expression: _formatScientificDisplay(fullExpression),
             textColor: textMuted,
             isMobile: isMobile,
           ),
           if (!isMobile) const SizedBox(height: 6),
           // Current Input
           _buildCurrentInput(
-            input: widget.logic.currentInput,
+            input: _formatScientificDisplay(widget.logic.currentInput),
             textColor: textMain,
             screenWidth: screenWidth,
             isMobile: isMobile,
@@ -383,6 +383,30 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         ],
       ),
     );
+  }
+
+  String _formatScientificDisplay(String val) {
+    if (!val.contains('e')) return val;
+    final exp = RegExp(r'([0-9.]+e[+-]?[0-9]+)');
+    return val.replaceAllMapped(exp, (match) {
+      final String matchStr = match.group(0)!;
+      final List<String> parts = matchStr.split('e');
+      if (parts.length == 2) {
+        String cleanExp = parts[1].replaceAll('+', '');
+        final Map<String, String> superscripts = {
+          '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+          '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
+          '-': '⁻',
+        };
+        String formattedExp = '';
+        for (int i = 0; i < cleanExp.length; i++) {
+          String char = cleanExp[i];
+          formattedExp += superscripts[char] ?? char;
+        }
+        return '${parts[0]} × 10$formattedExp';
+      }
+      return matchStr;
+    });
   }
 
   Widget _buildExpressionPreview({

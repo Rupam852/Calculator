@@ -121,8 +121,8 @@ function closeHistory() {
 
 // Display Management
 function updateDisplay() {
-    // Handle display value formatting
-    currentDisplayEl.textContent = currentInput;
+    // Handle display value formatting with scientific notation helper
+    currentDisplayEl.textContent = formatScientificDisplay(currentInput);
     
     // Dynamic Font Sizing for current input
     const length = currentInput.length;
@@ -142,7 +142,7 @@ function updateDisplay() {
         const opSymbols = { add: '+', subtract: '−', multiply: '×', divide: '÷' };
         displayExpression += ` ${opSymbols[activeOperator] || ''}`;
     }
-    expressionDisplayEl.textContent = displayExpression;
+    expressionDisplayEl.textContent = formatScientificDisplay(displayExpression);
     
     // Dynamic Font Sizing for expression preview
     const exprLength = displayExpression.length;
@@ -153,6 +153,29 @@ function updateDisplay() {
     } else {
         expressionDisplayEl.style.fontSize = '0.6rem'; // 64%
     }
+}
+
+function formatScientificDisplay(val) {
+    if (!val.includes('e')) return val;
+    const expRegex = /([0-9.]+e[+-]?[0-9]+)/g;
+    return val.replace(expRegex, (matchStr) => {
+        const parts = matchStr.split('e');
+        if (parts.length === 2) {
+            const cleanExp = parts[1].replace('+', '');
+            const superscripts = {
+                '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+                '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
+                '-': '⁻'
+            };
+            let formattedExp = '';
+            for (let i = 0; i < cleanExp.length; i++) {
+                const char = cleanExp[i];
+                formattedExp += superscripts[char] || char;
+            }
+            return `${parts[0]} × 10${formattedExp}`;
+        }
+        return matchStr;
+    });
 }
 
 // Precision Rounding helper
