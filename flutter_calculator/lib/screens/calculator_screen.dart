@@ -43,9 +43,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         final Color btnOpBorder = isDark ? const Color(0x406366F1) : const Color(0x264F46E5);
         final Color btnOpText = isDark ? const Color(0xFF818CF8) : const Color(0xFF4F46E5);
 
-        final List<Color> btnEqGradient = isDark
-            ? [const Color(0xFF6366F1), const Color(0xFFA855F7)]
-            : [const Color(0xFF4F46E5), const Color(0xFF9333EA)];
+        final Color btnEqBg = isDark ? const Color(0xFF38BDF8) : const Color(0xFFBAE6FD);
+        final Color btnEqText = isDark ? const Color(0xFF090D16) : const Color(0xFF0369A1);
 
         final Color historyDrawerBg = isDark ? const Color(0xF20F172A) : const Color(0xF7FFFFFF);
 
@@ -142,7 +141,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               btnOpBg: btnOpBg,
                               btnOpBorder: btnOpBorder,
                               btnOpText: btnOpText,
-                              btnEqGradient: btnEqGradient,
+                              btnEqBg: btnEqBg,
+                              btnEqText: btnEqText,
                             ),
                           ],
                         ),
@@ -181,7 +181,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                   btnOpBg: btnOpBg,
                                   btnOpBorder: btnOpBorder,
                                   btnOpText: btnOpText,
-                                  btnEqGradient: btnEqGradient,
+                                  btnEqBg: btnEqBg,
+                                  btnEqText: btnEqText,
                                 ),
                               ],
                             ),
@@ -411,7 +412,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     required Color btnOpBg,
     required Color btnOpBorder,
     required Color btnOpText,
-    required List<Color> btnEqGradient,
+    required Color btnEqBg,
+    required Color btnEqText,
   }) {
     // Keypad layout items
     final List<Map<String, dynamic>> keys = [
@@ -475,10 +477,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           textColor = btnOpText;
         } else {
           // equals
-          bg = Colors.transparent;
-          border = Colors.transparent;
-          textColor = Colors.white;
-          gradient = btnEqGradient;
+          bg = btnEqBg;
+          border = isDark ? const Color(0x1AFFFFFF) : const Color(0x33581C87);
+          textColor = btnEqText;
+          gradient = null;
         }
 
         return Container(
@@ -488,8 +490,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             boxShadow: type == 'equals'
                 ? [
                     BoxShadow(
-                      color: gradient![0].withValues(alpha: 0.4),
-                      blurRadius: 15,
+                      color: bg.withValues(alpha: isDark ? 0.3 : 0.1),
+                      blurRadius: 12,
                       offset: const Offset(0, 4),
                     )
                   ]
@@ -501,7 +503,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               borderRadius: BorderRadius.circular(18),
               side: BorderSide(
                 color: border,
-                width: type == 'equals' ? 0.0 : 1.0,
+                width: 1.0,
               ),
             ),
             child: InkWell(

@@ -36,10 +36,11 @@
     --btn-op-text: #818cf8;
     --btn-op-hover: rgba(99, 102, 241, 0.35);
     
-    --btn-eq-bg: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-    --btn-eq-text: #ffffff;
-    --btn-eq-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-    --btn-eq-hover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+    --btn-eq-bg: #38bdf8;
+    --btn-eq-text: #090d16;
+    --btn-eq-shadow: 0 4px 12px rgba(56, 189, 248, 0.35);
+    --btn-eq-hover: #0ea5e9;
+    --btn-eq-shadow-hover: 0 6px 20px rgba(56, 189, 248, 0.5);
     
     --header-icon-hover: rgba(255, 255, 255, 0.08);
     --circle-1-bg: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
@@ -77,10 +78,11 @@
     --btn-op-text: #4f46e5;
     --btn-op-hover: rgba(79, 70, 229, 0.15);
     
-    --btn-eq-bg: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
-    --btn-eq-text: #ffffff;
-    --btn-eq-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-    --btn-eq-hover: linear-gradient(135deg, #3730a3 0%, #701a75 100%);
+    --btn-eq-bg: #bae6fd;
+    --btn-eq-text: #0369a1;
+    --btn-eq-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+    --btn-eq-hover: #7dd3fc;
+    --btn-eq-shadow-hover: 0 6px 20px rgba(14, 165, 233, 0.25);
     
     --header-icon-hover: rgba(0, 0, 0, 0.05);
     --circle-1-bg: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
@@ -353,8 +355,6 @@ body {
 
 .btn-equals:hover {
     background: var(--btn-eq-hover);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
-    transform: translateY(-1px);
 }
 
 .btn-equals:active {
