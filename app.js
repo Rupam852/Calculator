@@ -124,6 +124,18 @@ function updateDisplay() {
     // Handle display value formatting
     currentDisplayEl.textContent = currentInput;
     
+    // Dynamic Font Sizing for current input
+    const length = currentInput.length;
+    if (length <= 8) {
+        currentDisplayEl.style.fontSize = '2.2rem';
+    } else if (length <= 12) {
+        currentDisplayEl.style.fontSize = '1.65rem'; // 75%
+    } else if (length <= 16) {
+        currentDisplayEl.style.fontSize = '1.2rem'; // 55%
+    } else {
+        currentDisplayEl.style.fontSize = '0.92rem'; // 42%
+    }
+    
     // Formatting the expression preview
     let displayExpression = expression;
     if (activeOperator) {
@@ -132,8 +144,15 @@ function updateDisplay() {
     }
     expressionDisplayEl.textContent = displayExpression;
     
-    // Auto scroll the screen displays to the right if numbers are too long
-    currentDisplayEl.scrollLeft = currentDisplayEl.scrollWidth;
+    // Dynamic Font Sizing for expression preview
+    const exprLength = displayExpression.length;
+    if (exprLength <= 15) {
+        expressionDisplayEl.style.fontSize = '0.95rem';
+    } else if (exprLength <= 25) {
+        expressionDisplayEl.style.fontSize = '0.74rem'; // 78%
+    } else {
+        expressionDisplayEl.style.fontSize = '0.6rem'; // 64%
+    }
 }
 
 // Precision Rounding helper

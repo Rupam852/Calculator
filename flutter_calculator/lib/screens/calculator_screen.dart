@@ -348,6 +348,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     required double screenWidth,
     required bool isMobile,
   }) {
+    final String fullExpression = widget.logic.expression +
+        (widget.logic.activeOperator != null
+            ? ' ${_getOperatorSymbol(widget.logic.activeOperator!)}'
+            : '');
+
     return Container(
       width: double.infinity,
       constraints: isMobile ? null : const BoxConstraints(minHeight: 110),
@@ -361,41 +366,114 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         mainAxisAlignment: isMobile ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // Expression Preview (aligned to top on mobile)
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            reverse: true,
-            child: Text(
-              widget.logic.expression +
-                  (widget.logic.activeOperator != null
-                      ? ' ${_getOperatorSymbol(widget.logic.activeOperator!)}'
-                      : ''),
-              style: TextStyle(
-                color: textMuted,
-                fontSize: isMobile ? 28 : 16,
-                fontWeight: isMobile ? FontWeight.w500 : FontWeight.w400,
-              ),
-            ),
+          // Expression Preview
+          _buildExpressionPreview(
+            expression: fullExpression,
+            textColor: textMuted,
+            isMobile: isMobile,
           ),
           if (!isMobile) const SizedBox(height: 6),
-          // Current Input (aligned to bottom on mobile)
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            reverse: true,
-            child: Text(
-              widget.logic.currentInput,
-              style: TextStyle(
-                color: textMain,
-                fontSize: isMobile 
-                    ? (screenWidth < 360 ? 54 : 64) 
-                    : (screenWidth < 360 ? 30 : 36),
-                fontWeight: isMobile ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
+          // Current Input
+          _buildCurrentInput(
+            input: widget.logic.currentInput,
+            textColor: textMain,
+            screenWidth: screenWidth,
+            isMobile: isMobile,
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildExpressionPreview({
+    required String expression,
+    required Color textColor,
+    required bool isMobile,
+  }) {
+    final double baseFontSize = isMobile ? 28.0 : 16.0;
+    
+    double fontSize = baseFontSize;
+    if (isMobile) {
+      int length = expression.length;
+      if (length <= 15) {
+        fontSize = baseFontSize;
+      } else if (length <= 25) {
+        fontSize = baseFontSize * 0.78; // 22.0
+      } else {
+        fontSize = baseFontSize * 0.64; // 18.0
+      }
+    }
+
+    final textWidget = Text(
+      expression,
+      textAlign: TextAlign.right,
+      maxLines: isMobile ? 2 : 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: textColor,
+        fontSize: fontSize,
+        fontWeight: isMobile ? FontWeight.w500 : FontWeight.w400,
+        height: 1.15,
+      ),
+    );
+
+    if (isMobile) {
+      return textWidget;
+    } else {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        reverse: true,
+        child: textWidget,
+      );
+    }
+  }
+
+  Widget _buildCurrentInput({
+    required String input,
+    required Color textColor,
+    required double screenWidth,
+    required bool isMobile,
+  }) {
+    final double baseFontSize = isMobile 
+        ? (screenWidth < 360 ? 54.0 : 64.0) 
+        : (screenWidth < 360 ? 30.0 : 36.0);
+        
+    double fontSize = baseFontSize;
+    if (isMobile) {
+      int length = input.length;
+      if (length <= 8) {
+        fontSize = baseFontSize;
+      } else if (length <= 12) {
+        fontSize = baseFontSize * 0.75; // 48.0
+      } else if (length <= 16) {
+        fontSize = baseFontSize * 0.55; // 35.0
+      } else {
+        fontSize = baseFontSize * 0.42; // 26.0
+      }
+    }
+
+    final textWidget = Text(
+      input,
+      textAlign: TextAlign.right,
+      maxLines: isMobile ? 2 : 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: textColor,
+        fontSize: fontSize,
+        fontWeight: isMobile ? FontWeight.w600 : FontWeight.w500,
+        height: 1.1,
+      ),
+    );
+
+    if (isMobile) {
+      return textWidget;
+    } else {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        reverse: true,
+        child: textWidget,
+      );
+    }
   }
 
   String _getOperatorSymbol(String op) {

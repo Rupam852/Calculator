@@ -273,13 +273,11 @@ body {
     width: 100%;
     text-align: right;
     line-height: 1.2;
-    white-space: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
-}
-
-.current-input::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+    white-space: normal;
+    word-break: break-all;
+    word-wrap: break-word;
+    max-height: 80px;
+    overflow-y: auto;
 }
 
 /* Keyboard / Buttons Grid */
