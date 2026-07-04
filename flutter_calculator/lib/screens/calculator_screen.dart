@@ -358,10 +358,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: isMobile ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // Expression Preview
+          // Expression Preview (aligned to top on mobile)
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             reverse: true,
@@ -372,13 +372,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       : ''),
               style: TextStyle(
                 color: textMuted,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
+                fontSize: isMobile ? 22 : 16,
+                fontWeight: isMobile ? FontWeight.w500 : FontWeight.w400,
               ),
             ),
           ),
-          const SizedBox(height: 6),
-          // Current Input
+          if (!isMobile) const SizedBox(height: 6),
+          // Current Input (aligned to bottom on mobile)
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             reverse: true,
@@ -386,8 +386,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               widget.logic.currentInput,
               style: TextStyle(
                 color: textMain,
-                fontSize: screenWidth < 360 ? 30 : 36,
-                fontWeight: FontWeight.w500,
+                fontSize: isMobile 
+                    ? (screenWidth < 360 ? 46 : 52) 
+                    : (screenWidth < 360 ? 30 : 36),
+                fontWeight: isMobile ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
           ),
