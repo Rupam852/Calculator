@@ -235,13 +235,42 @@ function chooseOperator(operator) {
     }
 
     if (activeOperator && !shouldResetDisplay) {
-        calculate();
+        // Intermediate calculation (builds continuous expression)
+        const prev = previousValue;
+        const current = parseFloat(currentInput);
+        if (!isNaN(prev) && !isNaN(current)) {
+            let result;
+            switch (activeOperator) {
+                case 'add': result = prev + current; break;
+                case 'subtract': result = prev - current; break;
+                case 'multiply': result = prev * current; break;
+                case 'divide':
+                    if (current === 0) {
+                        currentInput = 'Error';
+                        expression = `${expression} ÷ 0`;
+                        activeOperator = null;
+                        shouldResetDisplay = true;
+                        updateDisplay();
+                        return;
+                    }
+                    result = prev / current;
+                    break;
+                default: return;
+            }
+            const opSymbols = { add: '+', subtract: '−', multiply: '×', divide: '÷' };
+            const currentOpSymbol = opSymbols[activeOperator];
+            expression = `${expression} ${currentOpSymbol} ${formatNumber(current)}`;
+            currentInput = formatNumber(result);
+            previousValue = result;
+        }
+    } else {
+        previousValue = parseFloat(currentInput);
+        if (!isNaN(previousValue)) {
+            expression = formatNumber(previousValue);
+        }
     }
     
-    previousValue = parseFloat(currentInput);
     activeOperator = operator;
-    expression = formatNumber(previousValue);
-    currentInput = '0'; // Clear the input field for the next operand
     shouldResetDisplay = true;
     updateDisplay();
 }
@@ -255,10 +284,6 @@ function calculate() {
     if (isNaN(prev) || isNaN(current)) return;
     
     let result;
-    const opSymbols = { add: '+', subtract: '−', multiply: '×', divide: '÷' };
-    const currentOpSymbol = opSymbols[activeOperator];
-    const fullExpression = `${formatNumber(prev)} ${currentOpSymbol} ${formatNumber(current)}`;
-    
     switch (activeOperator) {
         case 'add':
             result = prev + current;
@@ -272,7 +297,7 @@ function calculate() {
         case 'divide':
             if (current === 0) {
                 currentInput = 'Error';
-                expression = `${formatNumber(prev)} ÷ 0`;
+                expression = `${expression} ÷ 0`;
                 activeOperator = null;
                 shouldResetDisplay = true;
                 updateDisplay();
@@ -284,7 +309,11 @@ function calculate() {
             return;
     }
     
+    const opSymbols = { add: '+', subtract: '−', multiply: '×', divide: '÷' };
+    const currentOpSymbol = opSymbols[activeOperator];
+    const fullExpression = `${expression} ${currentOpSymbol} ${formatNumber(current)}`;
     const formattedResult = formatNumber(result);
+    
     currentInput = formattedResult;
     expression = `${fullExpression} =`;
     addHistoryItem(fullExpression, formattedResult);

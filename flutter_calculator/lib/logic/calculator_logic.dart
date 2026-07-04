@@ -205,15 +205,43 @@ class CalculatorLogic extends ChangeNotifier {
     }
 
     if (_activeOperator != null && !_shouldResetDisplay) {
-      calculate();
+      // Intermediate calculation (builds continuous expression)
+      final double? prev = _previousValue;
+      final double? current = double.tryParse(_currentInput);
+      if (prev != null && current != null) {
+        double result;
+        switch (_activeOperator) {
+          case 'add': result = prev + current; break;
+          case 'subtract': result = prev - current; break;
+          case 'multiply': result = prev * current; break;
+          case 'divide':
+            if (current == 0) {
+              _currentInput = 'Error';
+              _expression = '$_expression ÷ 0';
+              _activeOperator = null;
+              _shouldResetDisplay = true;
+              notifyListeners();
+              return;
+            }
+            result = prev / current;
+            break;
+          default: return;
+        }
+        final opSymbols = {'add': '+', 'subtract': '−', 'multiply': '×', 'divide': '÷'};
+        final String currentOpSymbol = opSymbols[_activeOperator] ?? '';
+        
+        _expression = '$_expression $currentOpSymbol ${formatNumber(current)}';
+        _currentInput = formatNumber(result);
+        _previousValue = result;
+      }
+    } else {
+      _previousValue = double.tryParse(_currentInput);
+      if (_previousValue != null) {
+        _expression = formatNumber(_previousValue!);
+      }
     }
 
-    _previousValue = double.tryParse(_currentInput);
     _activeOperator = operator;
-    if (_previousValue != null) {
-      _expression = formatNumber(_previousValue!);
-    }
-    _currentInput = '0';
     _shouldResetDisplay = true;
     notifyListeners();
   }
@@ -227,24 +255,14 @@ class CalculatorLogic extends ChangeNotifier {
     if (prev == null || current == null) return;
 
     double result;
-    final opSymbols = {'add': '+', 'subtract': '−', 'multiply': '×', 'divide': '÷'};
-    final String currentOpSymbol = opSymbols[_activeOperator] ?? '';
-    final String fullExpression = '${formatNumber(prev)} $currentOpSymbol ${formatNumber(current)}';
-
     switch (_activeOperator) {
-      case 'add':
-        result = prev + current;
-        break;
-      case 'subtract':
-        result = prev - current;
-        break;
-      case 'multiply':
-        result = prev * current;
-        break;
+      case 'add': result = prev + current; break;
+      case 'subtract': result = prev - current; break;
+      case 'multiply': result = prev * current; break;
       case 'divide':
         if (current == 0) {
           _currentInput = 'Error';
-          _expression = '${formatNumber(prev)} ÷ 0';
+          _expression = '$_expression ÷ 0';
           _activeOperator = null;
           _shouldResetDisplay = true;
           notifyListeners();
@@ -252,11 +270,14 @@ class CalculatorLogic extends ChangeNotifier {
         }
         result = prev / current;
         break;
-      default:
-        return;
+      default: return;
     }
 
+    final opSymbols = {'add': '+', 'subtract': '−', 'multiply': '×', 'divide': '÷'};
+    final String currentOpSymbol = opSymbols[_activeOperator] ?? '';
+    final String fullExpression = '$_expression $currentOpSymbol ${formatNumber(current)}';
     final String formattedResult = formatNumber(result);
+
     _currentInput = formattedResult;
     _expression = '$fullExpression =';
     _addHistoryItem(fullExpression, formattedResult);
