@@ -372,7 +372,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       : ''),
               style: TextStyle(
                 color: textMuted,
-                fontSize: isMobile ? 22 : 16,
+                fontSize: isMobile ? 28 : 16,
                 fontWeight: isMobile ? FontWeight.w500 : FontWeight.w400,
               ),
             ),
@@ -387,7 +387,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               style: TextStyle(
                 color: textMain,
                 fontSize: isMobile 
-                    ? (screenWidth < 360 ? 46 : 52) 
+                    ? (screenWidth < 360 ? 54 : 64) 
                     : (screenWidth < 360 ? 30 : 36),
                 fontWeight: isMobile ? FontWeight.w600 : FontWeight.w500,
               ),
