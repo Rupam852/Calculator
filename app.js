@@ -33,7 +33,7 @@ function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('calculator-theme', newTheme);
+    safeSetStorage('calculator-theme', newTheme);
 }
 
 // History Setup
@@ -50,7 +50,7 @@ function loadHistory() {
 }
 
 function saveHistory() {
-    localStorage.setItem('calculator-history', JSON.stringify(history));
+    safeSetStorage('calculator-history', JSON.stringify(history));
     renderHistory();
 }
 
@@ -109,6 +109,14 @@ function escapeHtml(str) {
               .replace(/>/g, '&gt;')
               .replace(/"/g, '&quot;')
               .replace(/'/g, '&#039;');
+}
+
+function safeSetStorage(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch (e) {
+        console.warn('LocalStorage access is blocked or full:', e);
+    }
 }
 
 function openHistory() {
