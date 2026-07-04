@@ -231,7 +231,6 @@ class CalculatorLogic extends ChangeNotifier {
         final String currentOpSymbol = opSymbols[_activeOperator] ?? '';
         
         _expression = '$_expression $currentOpSymbol ${formatNumber(current)}';
-        _currentInput = formatNumber(result);
         _previousValue = result;
       }
     } else {
@@ -242,6 +241,7 @@ class CalculatorLogic extends ChangeNotifier {
     }
 
     _activeOperator = operator;
+    _currentInput = '0'; // Clear the input box for the next number entry
     _shouldResetDisplay = true;
     notifyListeners();
   }

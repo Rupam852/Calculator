@@ -260,7 +260,6 @@ function chooseOperator(operator) {
             const opSymbols = { add: '+', subtract: '−', multiply: '×', divide: '÷' };
             const currentOpSymbol = opSymbols[activeOperator];
             expression = `${expression} ${currentOpSymbol} ${formatNumber(current)}`;
-            currentInput = formatNumber(result);
             previousValue = result;
         }
     } else {
@@ -271,6 +270,7 @@ function chooseOperator(operator) {
     }
     
     activeOperator = operator;
+    currentInput = '0'; // Clear the input field for the next operand
     shouldResetDisplay = true;
     updateDisplay();
 }
